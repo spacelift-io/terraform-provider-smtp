@@ -17,20 +17,30 @@ func New(version string) func() *schema.Provider {
 		p := &schema.Provider{
 			Schema: map[string]*schema.Schema{
 				"host": {
-					Type:        schema.TypeString,
-					Description: "The hostname (without port) of the SMTP server",
+					Type: schema.TypeString,
+					Description: `
+The hostname (without port) of the SMTP server.
+Can be passed using the SMTP_HOST environment variable.",
+					`,
 					DefaultFunc: schema.EnvDefaultFunc("SMTP_HOST", nil),
 					Required:    true,
 				},
 				"username": {
-					Type:        schema.TypeString,
-					Description: "The username to use for authentication",
+					Type: schema.TypeString,
+					Description: `
+The username to use for authentication.
+Can be passed using the SMTP_USERNAME environment variable.
+					`,
 					DefaultFunc: schema.EnvDefaultFunc("SMTP_USERNAME", nil),
 					Required:    true,
 				},
 				"port": {
-					Type:        schema.TypeInt,
-					Description: "The port of the SMTP server",
+					Type: schema.TypeInt,
+					Description: `
+The port of the SMTP server.
+Can be passed using the SMTP_PORT environment variable.
+If not set explicitly, it will default to 587.
+					`,
 					DefaultFunc: schema.EnvDefaultFunc("SMTP_PORT", 587),
 					Optional:    true,
 				},
@@ -43,10 +53,14 @@ func New(version string) func() *schema.Provider {
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"secret": {
-								Type:        schema.TypeString,
-								Description: "The secret to use for authentication",
+								Type: schema.TypeString,
+								Description: `
+The secret to use for authentication.
+Can be passed using the SMTP_CRAM_MD5_SECRET environment variable.
+								`,
 								DefaultFunc: schema.EnvDefaultFunc("SMTP_CRAM_MD5_SECRET", nil),
 								Required:    true,
+								Sensitive:   true,
 							},
 						},
 					},
@@ -60,16 +74,22 @@ func New(version string) func() *schema.Provider {
 					Elem: &schema.Resource{
 						Schema: map[string]*schema.Schema{
 							"password": {
-								Type:        schema.TypeString,
-								Description: "The password to use for authentication",
+								Type: schema.TypeString,
+								Description: `
+The password to use for authentication.
+Can be passed using the SMTP_PLAIN_PASSWORD environment variable
+								`,
 								DefaultFunc: schema.EnvDefaultFunc("SMTP_PLAIN_PASSWORD", nil),
 								Required:    true,
+								Sensitive:   true,
 							},
 							"identity": {
 								Type: schema.TypeString,
 								Description: `
-									The identity to use for authentication. Usually identity should be the
-									empty string, to act as username.
+The identity to use for authentication.
+Usually the identity should be the empty string, to act as username,
+and this is the default.
+Can be passed using the SMTP_PLAIN_IDENTITY environment variable.
 								`,
 								DefaultFunc: schema.EnvDefaultFunc("SMTP_PLAIN_IDENTITY", ""),
 								Optional:    true,

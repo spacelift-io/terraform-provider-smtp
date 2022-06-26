@@ -23,21 +23,26 @@ provider "smtp" {
 
 ### Required
 
-- `host` (String) The hostname (without port) of the SMTP server
-- `username` (String) The username to use for authentication
+- `host` (String) The hostname (without port) of the SMTP server.
+Can be passed using the SMTP_HOST environment variable.",
+- `username` (String) The username to use for authentication.
+Can be passed using the SMTP_USERNAME environment variable.
 
 ### Optional
 
 - `cram_md5_auth` (Block List, Max: 1) CRAM-MD5 authentication settings as defined in RFC 2195 (see [below for nested schema](#nestedblock--cram_md5_auth))
 - `plain_auth` (Block List, Max: 1) PLAIN authentication settings as defined in RFC 4616 (see [below for nested schema](#nestedblock--plain_auth))
-- `port` (Number) The port of the SMTP server
+- `port` (Number) The port of the SMTP server.
+Can be passed using the SMTP_PORT environment variable.
+If not set explicitly, it will default to 587.
 
 <a id="nestedblock--cram_md5_auth"></a>
 ### Nested Schema for `cram_md5_auth`
 
 Required:
 
-- `secret` (String) The secret to use for authentication
+- `secret` (String, Sensitive) The secret to use for authentication.
+Can be passed using the SMTP_CRAM_MD5_SECRET environment variable.
 
 
 <a id="nestedblock--plain_auth"></a>
@@ -45,9 +50,12 @@ Required:
 
 Required:
 
-- `password` (String) The password to use for authentication
+- `password` (String, Sensitive) The password to use for authentication.
+Can be passed using the SMTP_PLAIN_PASSWORD environment variable
 
 Optional:
 
-- `identity` (String) The identity to use for authentication. Usually identity should be the
-									empty string, to act as username.
+- `identity` (String) The identity to use for authentication.
+Usually the identity should be the empty string, to act as username,
+and this is the default.
+Can be passed using the SMTP_PLAIN_IDENTITY environment variable.
