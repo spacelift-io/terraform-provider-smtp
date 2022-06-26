@@ -3,9 +3,6 @@
 #
 name: Tests
 on:
-  pull_request:
-    paths-ignore:
-      - 'README.md'
   push:
     paths-ignore:
       - 'README.md'
@@ -47,7 +44,7 @@ jobs:
       - run: go generate ./...
       - name: git diff
         run: |
-          git diff --compact-summary --exit-code || \
+          git diff --exit-code || \
             (echo; echo "Unexpected difference in directories after code generation. Run 'go generate ./...' command and commit."; exit 1)
 
   # run acceptance tests in a matrix with Terraform core versions
@@ -90,7 +87,7 @@ jobs:
       env:
         TF_ACC: "1"
         SMTP_HOST: ${{ secrets.SMTP_HOST }}
-        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_PLAIN_PASSWORD: ${{ secrets.SMTP_PLAIN_PASSWORD }}
         SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
 
       run: |
