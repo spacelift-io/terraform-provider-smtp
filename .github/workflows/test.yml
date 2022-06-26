@@ -9,12 +9,7 @@ on:
   push:
     paths-ignore:
       - 'README.md'
-  # For systems with an upstream API that could drift unexpectedly (like most SaaS systems, etc.),
-  # we recommend testing at a regular interval not necessarily tied to code changes. This will 
-  # ensure you are alerted to something breaking due to an API change, even if the code did not
-  # change.
-  # schedule:
-  #   - cron: '0 13 * * *'
+
 jobs:
   # ensure the code builds...
   build:
@@ -66,9 +61,6 @@ jobs:
       matrix:
         # list whatever Terraform versions here you would like to support
         terraform:
-          - '0.12.*'
-          - '0.13.*'
-          - '0.14.*'
           - '0.15.*'
           - '1.0.*'
           - '1.1.*'
@@ -97,11 +89,9 @@ jobs:
       timeout-minutes: 10
       env:
         TF_ACC: "1"
-
-        # Set whatever additional acceptance test env vars here. You can
-        # optionally use data from your repository secrets using the
-        # following syntax:
-        # SOME_VAR: ${{ secrets.SOME_VAR }}
+        SMTP_HOST: ${{ secrets.SMTP_HOST }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
 
       run: |
         go test -v -cover ./internal/provider/
