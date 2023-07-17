@@ -20,14 +20,33 @@ func TestAccResourceMessage(t *testing.T) {
 	})
 }
 
+func TestAccResourceFrom(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		ProviderFactories: providerFactories,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccResourceMessage,
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("smtp_message.test", "from", "\"Hello\" <world@example.com>"),
+				),
+			},
+		},
+	})
+}
+
 const testAccResourceMessage = `
 provider "smtp" {
-  plain_auth {}
+  host = "localhost"
+  username = "test"
+  plain_auth {
+	password = "test"
+  }
 }
 
 resource "smtp_message" "test" {
   subject = "Hello World!"
   body = "Boom"
+  from = "\"Hello\" <world@example.com>"
   to = ["devnull@spacelift.io"]
 }
 `

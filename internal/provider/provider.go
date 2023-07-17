@@ -34,6 +34,15 @@ Can be passed using the SMTP_USERNAME environment variable.
 					DefaultFunc: schema.EnvDefaultFunc("SMTP_USERNAME", nil),
 					Required:    true,
 				},
+				"from": {
+					Type: schema.TypeString,
+					Description: `
+The FROM value.
+Can be passed using the SMTP_FROM environment variable.
+					`,
+					DefaultFunc: schema.EnvDefaultFunc("SMTP_FROM", ""),
+					Optional:    true,
+				},
 				"port": {
 					Type: schema.TypeInt,
 					Description: `
@@ -112,6 +121,7 @@ Can be passed using the SMTP_PLAIN_IDENTITY environment variable.
 type client struct {
 	auth           smtp.Auth
 	host, username string
+	from           string
 	port           int
 }
 
@@ -120,6 +130,7 @@ func configureClient(ctx context.Context, r *schema.ResourceData) (interface{}, 
 		host:     r.Get("host").(string),
 		port:     r.Get("port").(int),
 		username: r.Get("username").(string),
+		from:     r.Get("from").(string),
 	}
 
 	if cram, ok := r.GetOk("cram_md5_auth"); ok {

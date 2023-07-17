@@ -50,6 +50,12 @@ func resourceMessage() *schema.Resource {
 				Required:    true,
 				ForceNew:    true,
 			},
+			"from": {
+				Type:        schema.TypeString,
+				Description: "From field",
+				Optional:    true,
+				ForceNew:    true,
+			},
 			"to":  recipientList("Direct recipients of the message"),
 			"cc":  recipientList("CC recipients of the message"),
 			"bcc": recipientList("BCC recipients of the message"),
@@ -72,7 +78,15 @@ func resourceMessageCreate(ctx context.Context, d *schema.ResourceData, meta int
 	msgWriter := textproto.NewWriter(bufio.NewWriter(buffer)).DotWriter()
 	writer := io.MultiWriter(sumWriter, msgWriter)
 
-	if _, err := fmt.Fprintln(writer, "From: ", client.username); err != nil {
+	from := client.username
+	if client.from != "" {
+		from = client.from
+	}
+	if d.Get("from") != nil && d.Get("from").(string) != "" {
+		from = d.Get("from").(string)
+	}
+
+	if _, err := fmt.Fprintln(writer, "From: ", from); err != nil {
 		return diag.Errorf("failed to write the From header: %v", err)
 	}
 
