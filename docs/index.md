@@ -24,15 +24,15 @@ provider "smtp" {
 ### Required
 
 - `host` (String) The hostname (without port) of the SMTP server.
-Can be passed using the SMTP_HOST environment variable.
+Can be passed using the SMTP_HOST environment variable.",
 - `username` (String) The username to use for authentication.
 Can be passed using the SMTP_USERNAME environment variable.
 
 ### Optional
 
-- `from` (String) Default sender of the message. Falls back to `username` if not set
-Can be passed using the SMTP_FROM environment variable.
 - `cram_md5_auth` (Block List, Max: 1) CRAM-MD5 authentication settings as defined in RFC 2195 (see [below for nested schema](#nestedblock--cram_md5_auth))
+- `from` (String) The FROM value.
+Can be passed using the SMTP_FROM environment variable.
 - `plain_auth` (Block List, Max: 1) PLAIN authentication settings as defined in RFC 4616 (see [below for nested schema](#nestedblock--plain_auth))
 - `port` (Number) The port of the SMTP server.
 Can be passed using the SMTP_PORT environment variable.

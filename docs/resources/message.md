@@ -16,7 +16,6 @@ Single SMTP message
 resource "smtp_message" "test" {
   subject = "Hello"
   body    = "World!"
-  from    = "\"hello world\" <world@example.com>"
   to      = ["devnull@spacelift.io"]
 }
 ```
@@ -31,9 +30,9 @@ resource "smtp_message" "test" {
 
 ### Optional
 
-- `from` (String) Sender of the message. Falls back to `clent.from` if not set
 - `bcc` (Set of String) BCC recipients of the message
 - `cc` (Set of String) CC recipients of the message
+- `from` (String) From field
 - `headers` (Map of String) Extra headers of the message
 - `to` (Set of String) Direct recipients of the message
 
